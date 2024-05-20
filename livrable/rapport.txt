@@ -1,0 +1,12 @@
+rotations dans les 4 sens -> ok
+trouver un mot dans la grille
+systeme de fichiers pour l'importation des mots
+cacher un mot dans la grille (insérer puis rotations aléatoires)
+stocker la grille dans un fichier externe (pas important pour le moment, mais pour pouvoir exporter après)
+
+à terme: interface graphique
+- affichage de la grille
+- bouton pour les rotations tout autour de la grille
+- word highlighter (mettre chaque element de tableau comme un bouton)
+- sur la tablette: faire glisser avec un doigt
+- ajouter les scores: mot le plus long, le plus de mots en 1min, le plus de mots en un minimum de mouvements
