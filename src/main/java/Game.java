@@ -28,7 +28,7 @@ public class Game {
     public int selectDifficulty() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please select a game difficulty from 0 to 5");
-        int difficulty = scanner.nextInt();
+        int difficulty = Gui.graphicDifficulty();
         if (difficulty < 0 || difficulty > 5){
             throw new IllegalArgumentException("Invalid selection");
         }
