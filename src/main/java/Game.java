@@ -26,9 +26,10 @@ public class Game {
     }
 
     public int selectDifficulty() {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Please select a game difficulty from 0 to 5");
-        int difficulty = Gui.graphicDifficulty();
+        //Scanner scanner = new Scanner(System.in);
+        //int difficulty = Gui.graphicDifficulty();
+        int difficulty = ui.getUserInputAsInt();
         if (difficulty < 0 || difficulty > 5){
             throw new IllegalArgumentException("Invalid selection");
         }
@@ -37,10 +38,11 @@ public class Game {
     }
 
     public WordDictionary selectSubject() {
-        Scanner scanner = new Scanner(System.in);
         ui.viewDictionary(".\\src\\main\\resources\\");
         System.out.println("Please select an existing subject (use viewDictionary to view available subjects)");
-        String dictionaryName = scanner.nextLine(); // Read the input here
+        //Scanner scanner = new Scanner(System.in);
+        //String dictionaryName = scanner.nextLine(); // Read the input here
+        String dictionaryName = ui.getUserInput();
         System.out.println("You selected: " + dictionaryName); // Debugging message
         
         // Construct the file path

@@ -6,70 +6,73 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Gui {
-    private static int selectedButtonNumber = -1;
-    private static JDialog dialog;
 
-    public static int graphicDifficulty() {
-        // Create the GUI on the Event Dispatch Thread
-        SwingUtilities.invokeLater(new Runnable() {
+    private JFrame frame;
+    private JPanel mainPanel;
+    private Grid grid;
+    private JComboBox<String> difficultyComboBox;
+
+    public Gui() {
+        initialize();
+    }
+
+    private void initialize() {
+        frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(800, 600);
+        
+        mainPanel = new JPanel(new BorderLayout());
+        frame.getContentPane().add(mainPanel);
+
+        showDifficultySelection();
+        
+        frame.setVisible(true);
+    }
+
+    private void showDifficultySelection() {
+        JPanel difficultyPanel = new JPanel();
+        difficultyPanel.setLayout(new GridLayout(2, 1));
+
+        JLabel difficultyLabel = new JLabel("Select Difficulty:");
+        difficultyPanel.add(difficultyLabel);
+
+        String[] difficulties = {"Easy", "Medium", "Hard"};
+        difficultyComboBox = new JComboBox<>(difficulties);
+        difficultyPanel.add(difficultyComboBox);
+
+        JButton startButton = new JButton("Start Game");
+        startButton.addActionListener(new ActionListener() {
             @Override
-            public void run() {
-                createAndShowGUI();
+            public void actionPerformed(ActionEvent e) {
+                String selectedDifficulty = (String) difficultyComboBox.getSelectedItem();
+                startGame(selectedDifficulty);
             }
         });
 
-        // Wait until a button is clicked
-        while (selectedButtonNumber == -1) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return selectedButtonNumber;
+        mainPanel.add(difficultyPanel, BorderLayout.CENTER);
+        mainPanel.add(startButton, BorderLayout.SOUTH);
     }
 
-    private static void createAndShowGUI() {
-        // Create a new frame
-        JFrame frame = new JFrame("Questionnaire");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 400);
-        frame.setLayout(new BorderLayout());
+    private void startGame(String difficulty) {
+        mainPanel.removeAll();
+        
+        // You might want to use the difficulty level to adjust grid parameters
+        grid = new Grid(difficulty);
+        mainPanel.add(grid.getGridPanel(), BorderLayout.CENTER);
 
-        // Create a panel for the question
-        JPanel questionPanel = new JPanel();
-        JLabel questionLabel = new JLabel("Please select a difficulty level:");
-        questionPanel.add(questionLabel);
-        frame.add(questionPanel, BorderLayout.NORTH);
+        mainPanel.revalidate();
+        mainPanel.repaint();
+    }
 
-        // Create a panel with a grid layout for the answers
-        JPanel panel = new JPanel(new GridLayout(6, 1, 10, 10));
-
-        // Create buttons for the answers
-        String[] answers = {"0", "1", "2", "3", "4", "5"};
-        for (int i = 0; i < answers.length; i++) {
-            JButton button = new JButton(answers[i]);
-            int buttonNumber = i;
-            button.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    selectedButtonNumber = buttonNumber;
-                    JOptionPane.showMessageDialog(frame, "You clicked button number: " + buttonNumber);
-                    dialog.dispose();  // Close the dialog
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    Gui window = new Gui();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            });
-            panel.add(button);
-        }
-
-        // Add the panel to the frame
-        frame.add(panel, BorderLayout.CENTER);
-
-        // Create and set up the dialog
-        dialog = new JDialog(frame, "Select Difficulty", true);
-        dialog.getContentPane().add(frame.getContentPane());
-        dialog.setSize(400, 400);
-        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        dialog.setVisible(true);
+            }
+        });
     }
 }
