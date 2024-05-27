@@ -1,11 +1,6 @@
 package wordPuzzle;
 
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Scanner;
-import java.util.Set;
-
-public class Game {
+/*public class Game {
     private Grid grid;
     private WordDictionary dictionary;
     private UI ui = new UI();
@@ -18,11 +13,18 @@ public class Game {
     public Game(int width, int height) {
         grid = new Grid(width, height);
         isGameOver = false;
-        int score = 0;
+        score = 0;
         difficulty=selectDifficulty();
         dictionary=selectSubject();
         wordsContained=prepareNewGame();
         foundWords = new HashSet<>();
+    }
+
+    public Grid getGrid() {
+        return this.grid;
+    }
+    public int getScord() {
+        return this.score;
     }
 
     public int selectDifficulty() {
@@ -152,5 +154,93 @@ public class Game {
             ui.displayGrid(grid); // Actualize grid after each actions
         }
         ui.displayMessage("Game over! Your final score: " + score);
+    }
+}*/
+
+import java.io.File;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
+
+public class Game {
+    private Grid grid;
+    private WordDictionary dictionary;
+    private UI ui = new UI();
+    private boolean isGameOver;
+    private int score;
+    private int difficulty;
+    private Set<String> wordsContained;
+    private Set<String> foundWords;
+
+    public Game(int width, int height, String dictionaryName, int difficulty) {
+        grid = new Grid(width, height);
+        isGameOver = false;
+        this.score = 0;
+        this.difficulty = difficulty;
+        this.dictionary = loadDictionary(dictionaryName);
+        this.wordsContained = prepareNewGame();
+        this.foundWords = new HashSet<>();
+    }
+
+    private WordDictionary loadDictionary(String dictionaryName) {
+        String filePath = "src" + File.separator + "main" + File.separator + "resources" + File.separator + dictionaryName + ".csv";
+        Set<String> words = Reader.loadFromCSV(filePath);
+        if (words.isEmpty()) {
+            throw new IllegalArgumentException("No words found in the dictionary.");
+        }
+        return new WordDictionary(dictionaryName, words);
+    }
+
+    private Set<String> prepareNewGame() {
+        grid.initializeGrid();
+        Set<String> words = dictionary.wordPool(grid);
+        Random rand = new Random();
+        for (String word : words) {
+            int startX = rand.nextInt(grid.getHeight());
+            int startY = rand.nextInt(grid.getWidth());
+            Word wordObj = new Word(word, startX, startY, Word.Orientation.DIAGONALrightdown);
+            grid.brutForce(wordObj);
+        }
+        for (int i = 0; i <= difficulty; i++) {
+            grid.randomRotate();
+        }
+        grid.fillEmptySpaces();
+        ui.displayGrid(grid);
+        return words;
+    }
+
+    public boolean checkWord(String userInput) {
+        if (!foundWords.contains(userInput)) {
+            if (wordsContained.contains(userInput)) {
+                score += userInput.length();
+                foundWords.add(userInput);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int getScore() {
+        return this.score;
+    }
+
+    public Grid getGrid() {
+        return this.grid;
+    }
+
+    public void rotateColumnUp(int colIndex) {
+        grid.rotateColumnUp(colIndex);
+    }
+
+    public void rotateColumnDown(int colIndex) {
+        grid.rotateColumnDown(colIndex);
+    }
+
+    public void rotateRowLeft(int rowIndex) {
+        grid.rotateRowLeft(rowIndex);
+    }
+
+    public void rotateRowRight(int rowIndex) {
+        grid.rotateRowRight(rowIndex);
     }
 }

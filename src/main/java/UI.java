@@ -38,7 +38,7 @@ public class UI {
         System.out.println("Score actuel: " + score);
     }
 
-   public void viewDictionary(String directoryPath) {
+    public void viewDictionary(String directoryPath) {
         File directory = new File(directoryPath);
         File[] files = directory.listFiles((dir, name) -> name.toLowerCase().endsWith(".csv"));
         if (files != null && files.length > 0) {
