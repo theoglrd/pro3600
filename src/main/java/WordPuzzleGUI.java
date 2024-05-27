@@ -1,5 +1,5 @@
 package wordPuzzle;
-
+/* 
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -189,7 +189,7 @@ public class WordPuzzleGUI {
         SwingUtilities.invokeLater(() -> new WordPuzzleGUI());
     }
 }
-/*
+*/
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -209,8 +209,7 @@ public class WordPuzzleGUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 700);
 
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout());
+        JPanel mainPanel = new JPanel(new BorderLayout());
 
         // Top Panel for dictionary and difficulty selection
         JPanel topPanel = new JPanel(new FlowLayout());
@@ -238,9 +237,65 @@ public class WordPuzzleGUI {
         mainPanel.add(topPanel, BorderLayout.NORTH);
 
         // Grid Panel for displaying the puzzle
-        gridPanel = new JPanel();
+        JPanel gridWrapperPanel = new JPanel(new BorderLayout());
+        gridPanel = new JPanel(new GridLayout(10, 10));
         gridPanel.setBorder(blackline);
-        mainPanel.add(gridPanel, BorderLayout.CENTER);
+
+        // Add top rotate buttons
+        JPanel topRotatePanel = new JPanel(new GridLayout(1, 10));
+        for (int i = 0; i < 10; i++) {
+            int colIndex = i;
+            JButton rotateUpButton = new JButton("↑");
+            rotateUpButton.addActionListener(e -> {
+                game.rotateColumnUp(colIndex);
+                updateGrid();
+            });
+            topRotatePanel.add(rotateUpButton);
+        }
+
+        // Add bottom rotate buttons
+        JPanel bottomRotatePanel = new JPanel(new GridLayout(1, 10));
+        for (int i = 0; i < 10; i++) {
+            int colIndex = i;
+            JButton rotateDownButton = new JButton("↓");
+            rotateDownButton.addActionListener(e -> {
+                game.rotateColumnDown(colIndex);
+                updateGrid();
+            });
+            bottomRotatePanel.add(rotateDownButton);
+        }
+
+        // Add left rotate buttons
+        JPanel leftRotatePanel = new JPanel(new GridLayout(10, 1));
+        for (int i = 0; i < 10; i++) {
+            int rowIndex = i;
+            JButton rotateLeftButton = new JButton("←");
+            rotateLeftButton.addActionListener(e -> {
+                game.rotateRowLeft(rowIndex);
+                updateGrid();
+            });
+            leftRotatePanel.add(rotateLeftButton);
+        }
+
+        // Add right rotate buttons
+        JPanel rightRotatePanel = new JPanel(new GridLayout(10, 1));
+        for (int i = 0; i < 10; i++) {
+            int rowIndex = i;
+            JButton rotateRightButton = new JButton("→");
+            rotateRightButton.addActionListener(e -> {
+                game.rotateRowRight(rowIndex);
+                updateGrid();
+            });
+            rightRotatePanel.add(rotateRightButton);
+        }
+
+        gridWrapperPanel.add(topRotatePanel, BorderLayout.NORTH);
+        gridWrapperPanel.add(bottomRotatePanel, BorderLayout.SOUTH);
+        gridWrapperPanel.add(leftRotatePanel, BorderLayout.WEST);
+        gridWrapperPanel.add(rightRotatePanel, BorderLayout.EAST);
+        gridWrapperPanel.add(gridPanel, BorderLayout.CENTER);
+
+        mainPanel.add(gridWrapperPanel, BorderLayout.CENTER);
 
         // Bottom Panel for user input and messages
         JPanel bottomPanel = new JPanel(new BorderLayout());
@@ -259,23 +314,6 @@ public class WordPuzzleGUI {
         bottomPanel.add(scoreLabel, BorderLayout.SOUTH);
 
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
-
-        // Rotation Buttons Panel
-        JPanel rotationPanel = new JPanel();
-        rotationPanel.setLayout(new GridLayout(2, 2, 10, 10)); // add spacing
-        rotationPanel.setBorder(blackline);
-
-        JButton rotateColUpButton = new JButton("Rotate Column Up");
-        JButton rotateColDownButton = new JButton("Rotate Column Down");
-        JButton rotateRowLeftButton = new JButton("Rotate Row Left");
-        JButton rotateRowRightButton = new JButton("Rotate Row Right");
-
-        rotationPanel.add(rotateColUpButton);
-        rotationPanel.add(rotateColDownButton);
-        rotationPanel.add(rotateRowLeftButton);
-        rotationPanel.add(rotateRowRightButton);
-
-        mainPanel.add(rotationPanel, BorderLayout.EAST);
 
         frame.add(mainPanel);
         frame.setVisible(true);
@@ -305,55 +343,10 @@ public class WordPuzzleGUI {
                 updateGrid();
             }
         });
-
-        rotateColUpButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int colIndex = getColumnIndex();
-                if (colIndex >= 0) {
-                    game.rotateColumnUp(colIndex);
-                    updateGrid();
-                }
-            }
-        });
-
-        rotateColDownButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int colIndex = getColumnIndex();
-                if (colIndex >= 0) {
-                    game.rotateColumnDown(colIndex);
-                    updateGrid();
-                }
-            }
-        });
-
-        rotateRowLeftButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int rowIndex = getRowIndex();
-                if (rowIndex >= 0) {
-                    game.rotateRowLeft(rowIndex);
-                    updateGrid();
-                }
-            }
-        });
-
-        rotateRowRightButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int rowIndex = getRowIndex();
-                if (rowIndex >= 0) {
-                    game.rotateRowRight(rowIndex);
-                    updateGrid();
-                }
-            }
-        });
     }
 
     private void updateGrid() {
         gridPanel.removeAll();
-        gridPanel.setLayout(new GridLayout(game.getGrid().getHeight(), game.getGrid().getWidth()));
         char[][] gridData = game.getGrid().getGrid();
         for (char[] row : gridData) {
             for (char cell : row) {
@@ -367,24 +360,7 @@ public class WordPuzzleGUI {
         gridPanel.repaint();
     }
 
-    private int getColumnIndex() {
-        String input = JOptionPane.showInputDialog(frame, "Enter column index:");
-        try {
-            return Integer.parseInt(input);
-        } catch (NumberFormatException e) {
-            messageLabel.setText("Invalid column index.");
-            return -1;
-        }
-    }
-
-    private int getRowIndex() {
-        String input = JOptionPane.showInputDialog(frame, "Enter row index:");
-        try {
-            return Integer.parseInt(input);
-        } catch (NumberFormatException e) {
-            messageLabel.setText("Invalid row index.");
-            return -1;
-        }
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new WordPuzzleGUI());
     }
 }
-*/
