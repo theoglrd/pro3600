@@ -1,0 +1,5 @@
+# ignore ALL .class files
+*.class
+
+# ignore ALL files in ANY directory named tmp
+tmp/
