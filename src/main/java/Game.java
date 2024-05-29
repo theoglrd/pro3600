@@ -157,6 +157,7 @@ package wordPuzzle;
     }
 }*/
 
+
 import java.io.File;
 import java.util.HashSet;
 import java.util.Random;
@@ -180,6 +181,10 @@ public class Game {
         this.dictionary = loadDictionary(dictionaryName);
         this.wordsContained = prepareNewGame();
         this.foundWords = new HashSet<>();
+    }
+
+    public boolean isGameOver() {
+        return this.isGameOver;
     }
 
     private WordDictionary loadDictionary(String dictionaryName) {

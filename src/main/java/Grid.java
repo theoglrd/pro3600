@@ -131,7 +131,7 @@ public class Grid {
                     throw error;
                 }
                 for (int i=0; i < length; i++) {
-                    if (grid[x][y-i] != '_') {
+                    if (grid[x][y-i] != '_' && grid[x][y-i] != text.charAt(i)) {
                         throw error;
                     }
                 }
@@ -141,7 +141,7 @@ public class Grid {
                     throw error;
                 }
                 for (int i=0; i < length; i++) {
-                    if (grid[x][y+i] != '_') {
+                    if (grid[x][y+i] != '_' && grid[x][y+i] != text.charAt(i)) {
                         throw error;
                     }
                 }
@@ -151,7 +151,7 @@ public class Grid {
                     throw error;
                 }
                 for (int i=0; i < length; i++) {
-                    if (grid[x-i][y] != '_') {
+                    if (grid[x-i][y] != '_' && grid[x-i][y] != text.charAt(i)) {
                         throw error;
                     }
                 }
@@ -161,7 +161,7 @@ public class Grid {
                     throw error;
                 }
                 for (int i=0; i < length; i++) {
-                    if (grid[x+i][y] != '_') {
+                    if (grid[x+i][y] != '_' && grid[x+i][y] != text.charAt(i)) {
                         throw error;
                     }
                 }
@@ -171,7 +171,7 @@ public class Grid {
                     throw error;
                 }
                 for (int i=0; i<length; i++) {
-                    if (grid[x+i][y-i] != '_') {
+                    if (grid[x+i][y-i] != '_' && grid[x+i][y-i] != text.charAt(i)) {
                         throw error;
                     }
                 }
@@ -181,7 +181,7 @@ public class Grid {
                     throw error;
                 }
                 for (int i=0; i<length; i++) {
-                    if (grid[x-i][y-i] != '_') {
+                    if (grid[x-i][y-i] != '_' && grid[x-i][y-i] != text.charAt(i)) {
                         throw error;
                     }
                 }
@@ -191,7 +191,7 @@ public class Grid {
                     throw error;
                 }
                 for (int i=0; i<length; i++) {
-                    if (grid[x-i][y+i] != '_') {
+                    if (grid[x-i][y+i] != '_' && grid[x-i][y+i] != text.charAt(i)) {
                         throw error;
                     }
                 }
@@ -202,7 +202,7 @@ public class Grid {
                     throw error;
                 }
                 for (int i=0; i<length; i++) {
-                    if (grid[x+i][y+i] != '_') {
+                    if (grid[x+i][y+i] != '_' && grid[x+i][y+i] != text.charAt(i)) {
                         throw error;
                     }
                 }
